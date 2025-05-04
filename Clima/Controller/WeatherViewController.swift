@@ -8,17 +8,50 @@
 
 import UIKit
 
-class WeatherViewController: UIViewController {
+class WeatherViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var conditionImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var cityLabel: UILabel!
+    @IBOutlet weak var searchTextField: UITextField!
+    
+    var weatherManager = WeatherManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        // This means that the text field will report back to this view controller (self) when the user presses return
+        searchTextField.delegate = self
     }
 
-
+    @IBAction func searchPressed(_ sender: UIButton) {
+        searchTextField.endEditing(true)
+        print(searchTextField.text!)
+    }
+    
+    // User pressed return
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        print(searchTextField.text!)
+        return true
+    }
+    
+    // This method is called when the user deselects the text field
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        if textField.text != "" {
+            return true
+        } else {
+            textField.placeholder = "Type something"
+            return false
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        // Use searchTextField.text to get the weather data for that city
+        if let city = searchTextField.text {
+            weatherManager.fetchWeather(cityName: city)
+            
+        }
+        
+        searchTextField.text = ""
+    }
 }
-
