@@ -8,7 +8,7 @@
 
 import UIKit
 
-class WeatherViewController: UIViewController, UITextFieldDelegate {
+class WeatherViewController: UIViewController, UITextFieldDelegate, WeatherManagerDelegate {
 
     @IBOutlet weak var conditionImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
@@ -20,8 +20,10 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // This means that the text field will report back to this view controller (self) when the user presses return
+        // This means that the text field will report back to this view controller (self, this object) when the user presses return
         searchTextField.delegate = self
+        weatherManager.delegate = self
+        
     }
 
     @IBAction func searchPressed(_ sender: UIButton) {
@@ -52,5 +54,9 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
         }
         
         searchTextField.text = ""
+    }
+    
+    func didUpdateWeather(weather: WeatherModel) {
+        print(weather.temperatureString)
     }
 }
