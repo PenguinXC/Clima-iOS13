@@ -41,7 +41,7 @@ struct WeatherManager {
                 
                 if let safeData = data {
                     if let weather = self.parseJSON(safeData) {
-                        // this call to delegate is made so the W
+                        // this call to delegate is made so the WeatherViewController (or any other class conforming to the protocol) will run the function didUpdateWeather
                         self.delegate?.didUpdateWeather(self, weather: weather)
                     }
                 }

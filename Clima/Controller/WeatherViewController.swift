@@ -56,8 +56,15 @@ class WeatherViewController: UIViewController, UITextFieldDelegate, WeatherManag
         searchTextField.text = ""
     }
     
+    // This method is called from inside the CompletionHandler in WeatherManager, but that method might be slow and we don't want to block the main thread
     func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel) {
-        print(weather.temperatureString)
+        // Before updating the didUpdateWeather method is called, the WeatherManager must finish its task.
+        // But in case the WeatherManager is slow, temperatureLabel has nothing to show.
+        // That is the reason we need to use DispatchQueue.main.async, to ensure that the UI updates happen on the main thread, without waiting for the WeatherManager to finish its task.
+        DispatchQueue.main.async {
+            self.temperatureLabel.text = weather.temperatureString
+            self.conditionImageView.image = UIImage(systemName: weather.conditionName)
+        }
     }
     
     func didFailWithError(error: any Error) {
