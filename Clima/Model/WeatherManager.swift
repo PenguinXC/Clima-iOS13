@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 // By convention, the delegate protocol is declared in the same file as the class it is associated with
 // Later, the ViewController will conform to this protocol to receive updates from the WeatherManager to get the notification and update the UI
@@ -23,7 +24,13 @@ struct WeatherManager {
     
     func fetchWeather(cityName: String) {
         let urlString = "\(weatherURL)&q=\(cityName)"
-        print(urlString)
+        debugPrint(urlString)
+        performRequest(with: urlString)
+    }
+    
+    func fetchWeather(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
+        let urlString = "\(weatherURL)&lat=\(latitude)&lon=\(longitude)"
+        debugPrint(urlString)
         performRequest(with: urlString)
     }
     
